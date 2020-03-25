@@ -1,0 +1,23 @@
+---
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'Amazon EKS Cluster'
+
+Resources:
+
+  EKSCluster:
+    Type: 'AWS::EKS::Cluster'
+    Properties:
+      Name: aws-eks-cluster
+      RoleArn: !ImportValue eks-role-EKS-RoleArn
+      ResourcesVpcConfig:
+        SecurityGroupIds:
+          - !ImportValue eks-vpc-SG
+        SubnetIds: !Split [",", !ImportValue eks-vpc-SUBNETS]
+
+Outputs:
+
+  EKSClusterName:
+    Description: The name of EKS cluster
+    Value: !Ref EKSCluster
+    Export:
+      Name: !Sub "${AWS::StackName}-ClusterName"
