@@ -25,3 +25,13 @@ aws eks update-kubeconfig \
 
 # Test the configuration
 kubectl get svc
+
+# NOTE: Wait for your cluster status to show as ACTIVE
+# Launch a Managed Node Group
+aws cloudformation create-stack \
+    --stack-name eks-nodegroup \
+    --template-body file://nodegroup.yaml \
+    --capabilities "CAPABILITY_IAM" "CAPABILITY_NAMED_IAM"
+
+# Test
+kubectl get nodes
