@@ -1,0 +1,18 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: hello-app-TAGVERSION
+spec:
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        name: hello-app
+        version: TAGVERSION
+    spec:
+      containers:
+        - name: hello-app
+          image: silviaclaire/hello-app:TAGVERSION
+          ports:
+            - name: http
+              containerPort: 5000
