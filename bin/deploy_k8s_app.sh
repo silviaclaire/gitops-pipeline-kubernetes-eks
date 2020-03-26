@@ -17,5 +17,5 @@ sed "s/TAGVERSION/$VERSION/" k8s/service.yaml | kubectl apply -f -
 
 # Test
 EXTERNAL_HOSTNAME=$(kubectl get svc $SERVICE -o=jsonpath="{.status.loadBalancer.ingress[*].hostname}")
-echo `http://$EXTERNAL_HOSTNAME/`
+echo "http://$EXTERNAL_HOSTNAME/"
 curl -s http://$EXTERNAL_HOSTNAME/
