@@ -1,3 +1,5 @@
+#!/bin/bash
+
 shopt -s failglob
 set -eu -o pipefail
 
