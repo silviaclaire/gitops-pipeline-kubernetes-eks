@@ -7,9 +7,9 @@ metadata:
 spec:
   ports:
     - name: http
-      port: 5000
-      targetPort: 80
+      port: 80
+      targetPort: 5000
   selector:
     name: hello-app
-    version: TAGVERSION
+    version: "TAGVERSION"
   type: LoadBalancer
