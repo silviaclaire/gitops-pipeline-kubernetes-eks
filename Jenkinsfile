@@ -2,6 +2,7 @@ pipeline {
 
   environment {
     VERSION = '1.0'
+    DOCKER_ID = 'silviaclaire'
     AWS_REGION = 'us-west-2'
     CLUSTER_NAME = 'aws-eks-cluster'
 
@@ -30,7 +31,7 @@ pipeline {
     stage('Build') {
       steps {
         script {
-          dockerImage = docker.build('silviaclaire/hello-app:${VERSION}')
+          dockerImage = docker.build('${DOCKER_ID}/hello-app:${VERSION}')
         }
       }
     }
@@ -68,8 +69,10 @@ pipeline {
 
     stage('Create EKS Cluster') {
       steps {
-        sh 'chmod +x bin/create_cluster_eks.sh'
-        sh './bin/create_cluster_eks.sh ${AWS_REGION} ${CLUSTER_NAME}'
+        sh '''
+          chmod +x bin/create_cluster_eks.sh
+          ./bin/create_cluster_eks.sh ${AWS_REGION} ${CLUSTER_NAME}
+        '''
       }
     }
   }
