@@ -1,23 +1,16 @@
 # ref: https://github.com/ianlewis/kubernetes-bluegreen-deployment-tutorial
 
-# Create Blue deployment
-sed 's/TAGVERSION/1.0/' kubernetes/deployment.yaml | kubectl apply -f -
+DEPLOY_VERSION=$1
+SVC_NAME='hello-app'
 
-# Create the service
-sed 's/TAGVERSION/1.0/' kubernetes/service.yaml | kubectl apply -f -
+# Always create a new deployment
+sed "s/TAGVERSION/$DEPLOY_VERSION/" k8s/deployment.yaml | kubectl apply -f -
 
-# Test Blue
-EXTERNAL_IP=$(kubectl get svc hello-app -o jsonpath="{.status.loadBalancer.ingress[*].ip}")
-curl -s http://$EXTERNAL_IP/
+# Create/Update service that expose this deployment
+# In the case of an update, traffic will be switched to the new deployment.
+sed "s/TAGVERSION/$DEPLOY_VERSION/" k8s/service.yaml | kubectl apply -f -
 
-# Update App
-
-# Create Green deployment
-sed 's/TAGVERSION/1.1/' kubernetes/deployment.yaml | kubectl apply -f -
-
-# Switch traffic to Green
-sed 's/TAGVERSION/1.1/' kubernetes/service.yaml | kubectl apply -f -
-
-# Test Green
-EXTERNAL_IP=$(kubectl get svc hello-app -o jsonpath="{.status.loadBalancer.ingress[*].ip}")
-curl -s http://$EXTERNAL_IP/
+# Test
+# ref: https://kubernetes.io/docs/reference/kubectl/jsonpath/
+EXTERNAL_HOSTNAME=$(kubectl get svc $SVC_NAME -o=jsonpath="{.status.loadBalancer.ingress[*].hostname}")
+curl -s http://$EXTERNAL_HOSTNAME/
