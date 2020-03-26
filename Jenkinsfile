@@ -14,12 +14,6 @@ pipeline {
 
   stages {
 
-    stage('Git Clone') {
-      steps {
-        git branch: 'test', url:'https://github.com/silviaclaire/jenkins-pipeline-docker-kubernetes-awseks.git'
-      }
-    }
-
     stage('Lint') {
       steps{
         // lint all .py files; disable import error
@@ -47,6 +41,12 @@ pipeline {
     }
 
     stage('Publish') {
+      when {
+        anyOf {
+          branch 'staging'
+          branch 'master'
+        }
+      }
       steps {
         script {
           docker.withRegistry('', 'dockerhub') {
@@ -68,6 +68,12 @@ pipeline {
     }
 
     stage('Create EKS Cluster') {
+      when {
+        anyOf {
+          branch 'staging'
+          branch 'master'
+        }
+      }
       steps {
         sh '''
           chmod +x bin/create_cluster_eks.sh
@@ -77,6 +83,12 @@ pipeline {
     }
 
     stage('Deploy K8s App') {
+      when {
+        anyOf {
+          branch 'staging'
+          branch 'master'
+        }
+      }
       steps {
         sh '''
           chmod +x bin/deploy_k8s_app.sh
