@@ -1,37 +1,27 @@
 # ref: https://docs.aws.amazon.com/eks/latest/userguide/getting-started-console.html
 
+AWS_REGION=$1
+
+# chmod +x bin/create_or_update_stack.sh
+
 # Create Amazon EKS Service Role
-aws cloudformation create-stack \
-    --stack-name eks-role \
-    --template-body file://role.yaml \
-    --capabilities "CAPABILITY_IAM" "CAPABILITY_NAMED_IAM"
+./bin/create_or_update_stack.sh $AWS_REGION eks-role cloudformation/role.yaml
 
 # Create Amazon EKS Cluster VPC
-aws cloudformation create-stack \
-    --stack-name eks-vpc \
-    --template-body file://vpc.yaml \
-    --capabilities "CAPABILITY_IAM" "CAPABILITY_NAMED_IAM"
+./bin/create_or_update_stack.sh $AWS_REGION eks-vpc cloudformation/vpc.yaml
 
 # Create Amazon EKS Cluster
-aws cloudformation create-stack \
-    --stack-name eks-cluster \
-    --template-body file://cluster.yaml \
-    --capabilities "CAPABILITY_IAM" "CAPABILITY_NAMED_IAM"
+./bin/create_or_update_stack.sh $AWS_REGION eks-cluster cloudformation/cluster.yaml
 
 # Create/Update kubeconfig File for cluster
-aws eks update-kubeconfig \
-    --region us-west-2 \
-    --name aws-eks-cluster
+aws eks update-kubeconfig --region $AWS_REGION --name aws-eks-cluster
 
 # Test the configuration
 kubectl get svc
 
 # NOTE: Wait for your cluster status to show as ACTIVE
 # Launch a Managed Node Group
-aws cloudformation create-stack \
-    --stack-name eks-nodegroup \
-    --template-body file://nodegroup.yaml \
-    --capabilities "CAPABILITY_IAM" "CAPABILITY_NAMED_IAM"
+./bin/create_or_update_stack.sh $AWS_REGION eks-nodegroup cloudformation/nodegroup.yaml
 
 # Test
 kubectl get nodes
