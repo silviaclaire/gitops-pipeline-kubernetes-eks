@@ -93,5 +93,17 @@ pipeline {
         '''
       }
     }
+
+    stage('Launch a Node Group') {
+      steps {
+        sh '''
+            # Launch a Managed Node Group
+            ./bin/create_or_update_stack.sh ${AWS_REGION} eks-nodegroup cloudformation/nodegroup.yaml
+
+            # Test
+            kubectl get nodes
+        '''
+      }
+    }
   }
 }
