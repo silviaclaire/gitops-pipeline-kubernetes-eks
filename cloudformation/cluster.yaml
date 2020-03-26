@@ -7,7 +7,7 @@ Resources:
   EKSCluster:
     Type: 'AWS::EKS::Cluster'
     Properties:
-      Name: aws-eks-cluster
+      Name: CLUSTER_NAME
       RoleArn: !ImportValue eks-role-EKS-RoleArn
       ResourcesVpcConfig:
         SecurityGroupIds:
