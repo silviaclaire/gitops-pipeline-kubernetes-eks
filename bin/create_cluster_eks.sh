@@ -3,7 +3,7 @@
 AWS_REGION=$1
 CLUSTER_NAME=$2
 
-# chmod +x bin/create_or_update_stack.sh
+chmod +x bin/create_or_update_stack.sh
 
 # Create Amazon EKS Service Role
 ./bin/create_or_update_stack.sh $AWS_REGION eks-role cloudformation/role.yaml
@@ -12,6 +12,7 @@ CLUSTER_NAME=$2
 ./bin/create_or_update_stack.sh $AWS_REGION eks-vpc cloudformation/vpc.yaml
 
 # Create Amazon EKS Cluster
+# NOTE: Cluster provisioning usually takes between 10 and 15 minutes.
 sed -i "s/CLUSTER_NAME/$CLUSTER_NAME/" cloudformation/cluster.yaml
 ./bin/create_or_update_stack.sh $AWS_REGION eks-cluster cloudformation/cluster.yaml
 
@@ -21,7 +22,6 @@ aws eks update-kubeconfig --region $AWS_REGION --name $CLUSTER_NAME
 # Test the configuration
 kubectl get svc
 
-# NOTE: Wait for your cluster status to show as ACTIVE
 # Launch a Managed Node Group
 ./bin/create_or_update_stack.sh $AWS_REGION eks-nodegroup cloudformation/nodegroup.yaml
 
