@@ -2,7 +2,6 @@ pipeline {
 
   environment {
     VERSION = '1.0'
-    REGISTRY = 'silviaclaire/hello-app'
     AWS_REGION = 'us-west-2'
     CLUSTER_NAME = 'aws-eks-cluster'
 
@@ -31,7 +30,7 @@ pipeline {
     stage('Build') {
       steps {
         script {
-          dockerImage = docker.build('${REGISTRY}:${VERSION}')
+          dockerImage = docker.build('silviaclaire/hello-app:${VERSION}')
         }
       }
     }
