@@ -1,4 +1,3 @@
-
 # ref: https://github.com/ianlewis/kubernetes-bluegreen-deployment-tutorial
 
 # Create Blue deployment
