@@ -75,5 +75,14 @@ pipeline {
         '''
       }
     }
+
+    stage('Deploy K8s App') {
+      steps {
+        sh '''
+          chmod +x bin/deploy_k8s_app.sh
+          ./bin/deploy_k8s_app.sh ${VERSION}
+        '''
+      }
+    }
   }
 }
