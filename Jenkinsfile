@@ -10,9 +10,9 @@ pipeline {
 
   stages {
 
-    stage('Cloning Git') {
+    stage('Git Clone') {
       steps {
-        git 'https://github.com/silviaclaire/jenkins-pipeline-docker-kubernetes-awseks.git'
+        git branch: 'test', url:'https://github.com/silviaclaire/jenkins-pipeline-docker-kubernetes-awseks.git'
       }
     }
 
