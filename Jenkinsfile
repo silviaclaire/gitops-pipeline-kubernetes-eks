@@ -3,6 +3,10 @@ pipeline {
   environment {
     VERSION = '1.0'
     REGISTRY = 'silviaclaire/hello-app'
+    AWS_REGION = 'us-west-2'
+    CLUSTER_NAME = 'aws-eks-cluster'
+
+    // DO NOT change this line (used as global variable)
     dockerImage = ''
   }
 
@@ -63,5 +67,31 @@ pipeline {
       }
     }
 
+    stage('Create EKS Cluster') {
+      steps {
+        sh 'chmod +x bin/create_or_update_stack.sh'
+
+        sh '''
+            # Create Amazon EKS Service Role
+            ./bin/create_or_update_stack.sh ${AWS_REGION} eks-role cloudformation/role.yaml
+
+            # Create Amazon EKS Cluster VPC
+            ./bin/create_or_update_stack.sh ${AWS_REGION} eks-vpc cloudformation/vpc.yaml
+        '''
+
+        sh '''
+            # Create Amazon EKS Cluster
+            sed -i "s/CLUSTER_NAME/${CLUSTER_NAME}/" cloudformation/cluster.yaml
+            ./bin/create_or_update_stack.sh ${AWS_REGION} eks-cluster cloudformation/cluster.yaml
+
+            # Create/Update kubeconfig File for cluster
+            aws eks update-kubeconfig --region ${AWS_REGION} --name ${CLUSTER_NAME}
+
+            # NOTE: Wait for your cluster status to show as ACTIVE
+            # Test the configuration
+            kubectl get svc
+        '''
+      }
+    }
   }
 }
