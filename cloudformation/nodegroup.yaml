@@ -4,7 +4,7 @@ Resources:
     Properties:
       ClusterName: !ImportValue eks-cluster-ClusterName
       InstanceTypes:
-        - t2.micro
+        - t3.small
       NodegroupName: eks-nodegroup
       NodeRole: !ImportValue eks-role-NODE-RoleArn
       ScalingConfig:
