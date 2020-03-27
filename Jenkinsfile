@@ -61,8 +61,7 @@ pipeline {
     stage('Clean') {
       steps {
         sh '''
-          docker stop \$(docker ps -a -q)
-          docker rm \$(docker ps -a -q)
+          docker image ls -a
           docker image prune -a -f
           docker image ls -a
         '''
