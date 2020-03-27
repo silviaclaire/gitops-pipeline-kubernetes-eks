@@ -93,7 +93,7 @@ pipeline {
       steps {
         sh '''
           chmod +x bin/deploy_k8s_app.sh
-          ./bin/deploy_k8s_app.sh ${VERSION}
+          ./bin/deploy_k8s_app.sh ${VERSION} ${BRANCH_NAME}
         '''
       }
     }
