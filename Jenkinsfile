@@ -1,7 +1,7 @@
 pipeline {
 
   environment {
-    VERSION = '1.0'
+    VERSION = '1.1'
     DOCKER_ID = 'silviaclaire'
     AWS_REGION = 'us-west-2'
     CLUSTER_NAME = 'aws-eks-cluster'
