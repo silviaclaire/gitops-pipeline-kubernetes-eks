@@ -34,4 +34,3 @@ check_status
 # Test
 EXTERNAL_HOSTNAME=$(kubectl get svc $SERVICE -n ${NAMESPACE} -o=jsonpath="{.status.loadBalancer.ingress[*].hostname}")
 echo "http://$EXTERNAL_HOSTNAME/"
-curl -s http://$EXTERNAL_HOSTNAME/
