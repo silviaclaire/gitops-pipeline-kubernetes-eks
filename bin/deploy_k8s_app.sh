@@ -12,8 +12,17 @@ kubectl get ns ${NAMESPACE} || kubectl create ns ${NAMESPACE}
 # Always create a new deployment
 sed "s/TAGVERSION/$VERSION/" k8s/${NAMESPACE}/deployment.yaml | kubectl -n ${NAMESPACE} apply -f -
 
+# Check deployments
+kubectl get deployments -n ${NAMESPACE}
+kubectl get pods -n ${NAMESPACE}
+
 # Wait until the Deployment is ready by checking the MinimumReplicasAvailable condition.
-kubectl wait --for=condition=available --timeout=600s -n ${NAMESPACE} deployment/$DEPLOYMENT
+kubectl wait --for=condition=available --timeout=120s -n ${NAMESPACE} deployment/$DEPLOYMENT
+
+# Check deployments again
+kubectl get deployments -n ${NAMESPACE}
+kubectl get pods -n ${NAMESPACE}
+kubectl describe pods -n ${NAMESPACE}
 
 # Create/Update service that expose this deployment
 # In the case of an update, traffic will be switched to the new version.

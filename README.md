@@ -46,3 +46,10 @@ If everything is ready for production:
     sed -i "s/VERSION = '1.0'/VERSION = '1.1'/" Jenkinsfile
     ```
 1. Commit changes to `develop`, push to trigger the pipeline for CI.
+
+## Trouble Shoot
+
+1. How to fix Insufficient pods issue when deploying to Amazon EKS:
+
+
+    Refer to [this](https://dev.to/wingkwong/how-to-fix-insufficient-pods-issue-when-deploying-to-amazon-eks-d35) and [this](https://github.com/awslabs/amazon-eks-ami/blob/master/files/eni-max-pods.txt) to choose a suitable instance type for the worker node.
