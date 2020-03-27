@@ -29,6 +29,10 @@ kubectl get pods -n ${NAMESPACE}
 # In the case of an update, traffic will be switched to the new version.
 sed "s/TAGVERSION/$VERSION/" k8s/${NAMESPACE}/service.yaml | kubectl -n ${NAMESPACE} apply -f -
 
+# Wait a few seconds for the service become ready
+# ref: For now Services do not have conditions in their status. (kubenetes #80828)
+sleep 60
+
 # Test
 EXTERNAL_HOSTNAME=$(kubectl get svc $SERVICE -n ${NAMESPACE} -o=jsonpath="{.status.loadBalancer.ingress[*].hostname}")
 echo "http://$EXTERNAL_HOSTNAME/"
