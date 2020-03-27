@@ -5,6 +5,7 @@ pipeline {
     DOCKER_ID = 'silviaclaire'
     AWS_REGION = 'us-west-2'
     CLUSTER_NAME = 'aws-eks-cluster'
+    REGISTRY_CREDENTIAL_ID = 'dockerhub'
 
     // DO NOT change this line (used as global variable)
     dockerImage = ''
@@ -49,7 +50,7 @@ pipeline {
       }
       steps {
         script {
-          docker.withRegistry('', 'dockerhub') {
+          docker.withRegistry('', REGISTRY_CREDENTIAL_ID) {
             dockerImage.push()
             dockerImage.push('latest')
           }
